@@ -69,8 +69,8 @@ export type QueryParams = {
   session?: string;
   division?: string;
   author?: string; // author name contains
-  limit?: number;
-  offset?: number;
+  limit: number;
+  offset: number;
 };
 
 
