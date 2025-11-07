@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import Papa from "papaparse";
+import type { ParseLocalFileConfig, ParseResult } from "papaparse";
 import type {
   Author,
   AuthorCsvRow,
@@ -31,13 +32,14 @@ function dataPath(filename: string) {
 function parseCsvFile<T extends object>(filePath: string): Promise<T[]> {
   return new Promise((resolve, reject) => {
     const fileStream = fs.createReadStream(filePath, { encoding: "utf8" });
-    Papa.parse<T>(fileStream as unknown as Papa.ParseLocalFileConfig["file"], {
+    const config: ParseLocalFileConfig<T> = {
       header: true,
       skipEmptyLines: true,
       transformHeader: (h) => h.trim(),
-      complete: (res) => resolve((res.data as T[]) || []),
+      complete: (res: ParseResult<T>) => resolve((res.data as T[]) || []),
       error: (err) => reject(err),
-    } as Papa.ParseLocalFileConfig<T>);
+    };
+    Papa.parse<T>(fileStream as unknown as ParseLocalFileConfig<T>["file"], config);
   });
 }
 
