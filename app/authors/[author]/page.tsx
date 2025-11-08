@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import PaperList, { type Paper } from "@/app/components/PaperList";
 
 async function fetchAuthorPapers(author: string): Promise<Paper[]> {
@@ -23,7 +24,9 @@ export default async function AuthorDetailPage({ params }: { params: Promise<{ a
   const papers = await fetchAuthorPapers(decoded);
   return (
     <main className="p-6">
-      <PaperList papers={papers} authorName={decoded} />
+      <Suspense fallback={<div>加载中...</div>}>
+        <PaperList papers={papers} authorName={decoded} />
+      </Suspense>
     </main>
   );
 }

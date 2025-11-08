@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import PaperList, { type Paper } from "@/app/components/PaperList";
 
 async function fetchSessionPapers(sessionId: string): Promise<{ papers: Paper[]; sessionName?: string }> {
@@ -25,7 +26,9 @@ export default async function SessionDetailPage({ params }: { params: Promise<{ 
   const { papers, sessionName } = await fetchSessionPapers(decoded);
   return (
     <main className="p-6">
-      <PaperList papers={papers} sessionName={sessionName} />
+      <Suspense fallback={<div>加载中...</div>}>
+        <PaperList papers={papers} sessionName={sessionName} />
+      </Suspense>
     </main>
   );
 }
